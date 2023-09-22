@@ -62,3 +62,15 @@ cnn.add(tf.keras.layers.Dense(units=1, activation='sigmoid'))
 cnn.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy'])
 cnn.fit(x = training_set, validation_data = validation_generator, epochs = 25)
 
+#Testing 
+test_image = image.load_img('/home/george/Data/Potholedata/normal/341.jpg', target_size = (64, 64))
+test_image = image.img_to_array(test_image)
+test_image = np.expand_dims(test_image, axis = 0)
+result = cnn.predict(test_image)
+training_set.class_indices
+if result[0][0] == 1:
+  prediction = 'pothole'
+else:
+  prediction = 'normal'
+
+print(predictions)
