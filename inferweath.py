@@ -5,8 +5,9 @@ def inferweather(input_img):
   results=model.predict(source=input_img)
   #0-Dry 1-Wet
   result=[0]*2
-  weath=strs.probs.cpu().numpy().top1
-  conf=strs.probs.cpu().numpy().top1conf
-  result[weath]=conf
-  result[abs(weath-1)]=1-conf
-  return result
+  for strs in results:
+    weath=strs.probs.cpu().numpy().top1
+    conf=strs.probs.cpu().numpy().top1conf
+    result[weath]=conf
+    result[abs(weath-1)]=1-conf
+    return result
