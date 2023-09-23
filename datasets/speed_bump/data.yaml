@@ -1,0 +1,5 @@
+train: /media/gokul/Data/big-bucks-hack23/datasets/speed_bump/train/images
+val: /media/gokul/Data/big-bucks-hack23/datasets/speed_bump/valid/images
+
+nc: 1
+names: ['speed-bumps']

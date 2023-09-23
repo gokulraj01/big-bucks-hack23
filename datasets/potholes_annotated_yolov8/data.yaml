@@ -1,6 +1,6 @@
-train: train/images
-val: valid/images
-test: test/images
+train: /media/gokul/Data/big-bucks-hack23/datasets/potholes_annotated_yolov8/train/images
+val: /media/gokul/Data/big-bucks-hack23/datasets/potholes_annotated_yolov8/valid/images
+test: /media/gokul/Data/big-bucks-hack23/datasets/potholes_annotated_yolov8/test/images
 
 nc: 1
 names: ['pothole']
