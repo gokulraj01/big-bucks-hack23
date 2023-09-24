@@ -22,14 +22,25 @@ class CameraADAS:
         ndim = min(self.max_w, nw), min(self.max_h, int(self.ratio_hw*nh))
         if not ndim[0] or not ndim[1]: self.ndims = (1,1)
         else: self.ndims = ndim
+    
+    def showText(self, img, pot_conf, wet_conf, hump_conf):
+        if pot_conf > 0:
+            cv2.putText(img, f"Pothole: {pot_conf}", (0,40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,0,0), 2)
+        if wet_conf[0] > wet_conf[1]:
+            cv2.putText(img, f"Dry: {wet_conf[0]:.3}", (0,80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        else:
+            cv2.putText(img, f"Wet: {wet_conf[1]:.3}", (0,80), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,0,255), 2)
+        if hump_conf > 0:
+            cv2.putText(img, f"Hump: {hump_conf:.3}", (0,120), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
 
     def nextFrame(self):
         while self.vid.isOpened():
             ret, frame = self.vid.read()
-            condn_res = self.condn.infer(frame)
-            frame = self.pot.infer(frame)
-            frame = self.hump.infer(frame)
+            pcond = self.condn.infer(frame)
+            frame, pconf = self.pot.infer(frame)
+            frame, phump = self.hump.infer(frame)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            self.showText(frame, pconf, pcond, phump)
             return frame
         else:
             self.running = False

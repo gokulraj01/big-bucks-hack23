@@ -8,13 +8,15 @@ class YOLODetect:
 
     def infer(self, img, confidence=0.2, thickness=1):
         result = self.model(img)
-        # result = result.filter(conf=confidence)
+        cavg = 0
         for det in result.pred[0]:
             det = det.cpu()
             if det[4] > confidence:
                 xmin, ymin, xmax, ymax, conf, cls = det.numpy().astype(int)
                 img = cv2.rectangle(img, (xmin, ymin), (xmax, ymax), self.color, thickness)
-        return img
+                cavg += det[4].item()
+        if cavg > 0: cavg = cavg/len(result.pred[0])
+        return img, cavg
 
 class RoadConditionDetect:
     def __init__(self, weights:str):
@@ -35,7 +37,7 @@ if __name__ == "__main__":
     img_dir = "infer_test"
     imgs = os.listdir(img_dir)
     pot = YOLODetect("/home/gokul/yolov5/", "models/pothole_model/weights/best.pt", (0,0,255))
-    hump = YOLODetect("/home/gokul/yolov5/", "models/speed_bump_model/weights/best.pt", (0,255,0))
+    hump = YOLODetect("/home/gokul/yolov5/", "models/speed_bump_model/weights/best.pt", (64,255,64))
 
     for imgpath in imgs:
         img = cv2.imread(f"{img_dir}/{imgpath}")
